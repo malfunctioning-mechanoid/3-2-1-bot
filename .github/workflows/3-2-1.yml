@@ -2,7 +2,7 @@ name: Weekly 3-2-1 Extraction
 
 on:
   schedule:
-    # Runs at 22:00 UTC every Friday (03:30 IST Saturday)
+    # Runs at 22:17 UTC every Friday (03:30 IST Saturday)
     - cron: '17 22 * * 5'
   workflow_dispatch: # Allows you to run it manually by clicking a button in GitHub
 
