@@ -92,6 +92,9 @@ async function pushToNotion(item) {
             },
             "Type": {
                 select: { name: item.Type }
+            },
+            "3-2-1 View Control": {
+                relation: [{id: "410efe2743e680dca4deda5dd12185c9"}]
             }
         }
     };
