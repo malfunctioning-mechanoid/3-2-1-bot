@@ -1,8 +1,23 @@
 // --- 1. Placeholder: Fetch the Custom URL ---
 async function fetchNewsletterUrl() {
-    // TODO: Implement your logic to get this week's URL
-    // For now, returning a static example URL
-    return 'https://jamesclear.com/3-2-1/november-5-2026';
+    const now = new Date();
+
+    const currentDay = now.getUTCDay();
+    const diff = (currentDay + 3) % 7;
+    now.setUTCDate(now.getUTCDate() - (diff === 0 ? 7 : diff));
+
+    const months = [
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december"
+    ];
+
+    const month = months[now.getUTCMonth()];
+    const date = now.getUTCDate();
+    const year = now.getUTCFullYear();
+
+    const url = `https://jamesclear.com/3-2-1/${month}-${date}-${year}`;
+
+    return url;
 }
 
 async function fetchHtml(url) {
@@ -67,10 +82,10 @@ function parseNewsletter(html) {
 // --- 3. Notion Integration ---
 async function pushToNotion(item) {
     const NOTION_API_KEY = process.env.NOTION_API_KEY;
-    const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
+    const NOTION_DATA_SOURCE_ID = process.env.NOTION_DATA_SOURCE_ID; 
 
     const payload = {
-        parent: { database_id: NOTION_DATABASE_ID },
+        parent: { data_source_id: NOTION_DATA_SOURCE_ID },
         properties: {
             "Content": {
                 title: [{ text: { content: item.Content } }]
@@ -86,7 +101,8 @@ async function pushToNotion(item) {
         headers: {
             'Authorization': `Bearer ${NOTION_API_KEY}`,
             'Content-Type': 'application/json',
-            'Notion-Version': '2022-06-28'
+            // This header must be 2025-09-03 or newer to recognize data sources
+            'Notion-Version': '2026-03-11' 
         },
         body: JSON.stringify(payload)
     });
