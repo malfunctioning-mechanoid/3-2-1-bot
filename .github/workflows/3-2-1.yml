@@ -1,0 +1,26 @@
+name: Weekly 3-2-1 Extraction
+
+on:
+  schedule:
+    # Runs at 22:00 UTC every Friday (03:30 IST Saturday)
+    - cron: '17 22 * * 5'
+  workflow_dispatch: # Allows you to run it manually by clicking a button in GitHub
+
+jobs:
+  extract-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+
+      - name: Run Extraction Script
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node index.js
